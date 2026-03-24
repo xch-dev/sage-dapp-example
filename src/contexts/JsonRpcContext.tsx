@@ -49,6 +49,7 @@ interface JsonRpc {
     getPublicKeys: (data: {
         limit?: number;
         offset?: number;
+        hardened?: boolean;
     }) => Promise<string[]>;
     filterUnlockedCoins: (data: { coinNames: string[] }) => Promise<string[]>;
     getAssetCoins: (data: {
@@ -72,7 +73,7 @@ interface JsonRpc {
         message: string;
     }) => Promise<string>;
     sendTransaction: (
-        data: unknown
+        data: unknown,
     ) => Promise<{ status: number; error: string | null }>;
     createOffer: (data: unknown) => Promise<{ offer: string; id: string }>;
     takeOffer: (data: { offer: string }) => Promise<{ id: string }>;
@@ -156,7 +157,7 @@ export function useJsonRpc() {
 
     if (!context)
         throw new Error(
-            'Calls to `useJsonRpc` must be used within a `JsonRpcProvider`.'
+            'Calls to `useJsonRpc` must be used within a `JsonRpcProvider`.',
         );
 
     return context;

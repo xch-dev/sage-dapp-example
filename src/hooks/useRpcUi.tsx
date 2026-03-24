@@ -32,6 +32,7 @@ export function useRpcUi() {
     const [fee, setFee] = useState(0);
     const [memos, setMemos] = useState('');
     const [did, setDid] = useState('');
+    const [hardened, setHardened] = useState(false);
 
     function handlePromise(promise: Promise<unknown>) {
         promise
@@ -66,8 +67,9 @@ export function useRpcUi() {
         chip0002_getPublicKeys: [
             numberOption('Offset', offset, setOffset),
             numberOption('Limit', limit, setLimit),
+            booleanOption('Hardened', hardened, setHardened),
             submitButton('Get Public Keys', () =>
-                rpc.getPublicKeys({ limit, offset })
+                rpc.getPublicKeys({ limit, offset, hardened }),
             ),
         ],
         chip0002_filterUnlockedCoins: [
@@ -81,7 +83,7 @@ export function useRpcUi() {
                                   .split(',')
                                   .map((coinId) => coinId.trim())
                             : [],
-                })
+                }),
             ),
         ],
         chip0002_getAssetCoins: [
@@ -96,15 +98,15 @@ export function useRpcUi() {
                         type === 'cat'
                             ? 'cat'
                             : type === 'nft'
-                            ? 'nft'
-                            : type === 'did'
-                            ? 'did'
-                            : null,
+                              ? 'nft'
+                              : type === 'did'
+                                ? 'did'
+                                : null,
                     assetId: assetId || null,
                     includeLocked,
                     offset,
                     limit,
-                })
+                }),
             ),
         ],
         chip0002_getAssetBalance: [
@@ -116,41 +118,41 @@ export function useRpcUi() {
                         type === 'cat'
                             ? 'cat'
                             : type === 'nft'
-                            ? 'nft'
-                            : type === 'did'
-                            ? 'did'
-                            : null,
+                              ? 'nft'
+                              : type === 'did'
+                                ? 'did'
+                                : null,
                     assetId: assetId || null,
-                })
+                }),
             ),
         ],
         chip0002_signCoinSpends: [
             stringOption('Coin Spends', coinSpends, setCoinSpends),
             submitButton('Sign Coin Spends', () =>
-                rpc.signCoinSpends({ coinSpends: JSON.parse(coinSpends) })
+                rpc.signCoinSpends({ coinSpends: JSON.parse(coinSpends) }),
             ),
         ],
         chip0002_signMessage: [
             stringOption('Public Key', publicKey, setPublicKey),
             stringOption('Message', message, setMessage),
             submitButton('Sign Message', () =>
-                rpc.signMessage({ publicKey, message })
+                rpc.signMessage({ publicKey, message }),
             ),
         ],
         chip0002_sendTransaction: [
             stringOption('Spend Bundle', spendBundle, setSpendBundle),
             submitButton('Send Transaction', () =>
-                rpc.sendTransaction({ spendBundle: JSON.parse(spendBundle) })
+                rpc.sendTransaction({ spendBundle: JSON.parse(spendBundle) }),
             ),
         ],
         chia_createOffer: [
             stringOption(
                 'Create Offer Json',
                 createOfferJson,
-                setCreateOfferJson
+                setCreateOfferJson,
             ),
             submitButton('Create Offer', () =>
-                rpc.createOffer(JSON.parse(createOfferJson))
+                rpc.createOffer(JSON.parse(createOfferJson)),
             ),
         ],
         chia_takeOffer: [
@@ -160,7 +162,7 @@ export function useRpcUi() {
         chia_cancelOffer: [
             stringOption('Offer Id', offerId, setOfferId),
             submitButton('Cancel Offer', () =>
-                rpc.cancelOffer({ id: offerId })
+                rpc.cancelOffer({ id: offerId }),
             ),
         ],
         chia_getNfts: [
@@ -172,7 +174,7 @@ export function useRpcUi() {
                     collectionId: collectionId || undefined,
                     offset,
                     limit,
-                })
+                }),
             ),
         ],
         chia_send: [
@@ -191,7 +193,7 @@ export function useRpcUi() {
                         memos.trim().length > 0
                             ? memos.trim().split(/\s*,\s*/)
                             : undefined,
-                })
+                }),
             ),
         ],
         chia_getAddress: [
@@ -201,7 +203,7 @@ export function useRpcUi() {
             stringOption('Address', address, setAddress),
             stringOption('Message', message, setMessage),
             submitButton('Sign Message By Address', () =>
-                rpc.signMessageByAddress({ address, message })
+                rpc.signMessageByAddress({ address, message }),
             ),
         ],
         chia_bulkMintNfts: [
@@ -212,7 +214,7 @@ export function useRpcUi() {
                     did,
                     nfts: [{}, {}, {}],
                     fee,
-                })
+                }),
             ),
         ],
     };
@@ -223,7 +225,7 @@ export function useRpcUi() {
 function stringOption(
     name: string,
     value: string,
-    setValue: React.Dispatch<React.SetStateAction<string>>
+    setValue: React.Dispatch<React.SetStateAction<string>>,
 ) {
     return (
         <TextField
@@ -239,7 +241,7 @@ function stringOption(
 function numberOption(
     name: string,
     value: number,
-    setValue: React.Dispatch<React.SetStateAction<number>>
+    setValue: React.Dispatch<React.SetStateAction<number>>,
 ) {
     return (
         <TextField
@@ -258,7 +260,7 @@ function numberOption(
 function booleanOption(
     name: string,
     value: boolean,
-    setValue: React.Dispatch<React.SetStateAction<boolean>>
+    setValue: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
     return (
         <FormGroup>
