@@ -77,7 +77,10 @@ interface JsonRpc {
     ) => Promise<{ status: number; error: string | null }>;
     createOffer: (data: unknown) => Promise<{ offer: string; id: string }>;
     takeOffer: (data: { offer: string }) => Promise<{ id: string }>;
-    cancelOffer: (data: { id: string }) => Promise<Empty>;
+    cancelOffer: (data: {
+        id: string;
+        fee?: number | string;
+    }) => Promise<Empty>;
     getNfts: (data: {
         collectionId?: string;
         offset: number | null;

@@ -29,7 +29,7 @@ export function useRpcUi() {
     const [collectionId, setCollectionId] = useState('');
     const [address, setAddress] = useState('');
     const [amount, setAmount] = useState(0);
-    const [fee, setFee] = useState(0);
+    const [fee, setFee] = useState('');
     const [memos, setMemos] = useState('');
     const [did, setDid] = useState('');
     const [hardened, setHardened] = useState(false);
@@ -161,8 +161,9 @@ export function useRpcUi() {
         ],
         chia_cancelOffer: [
             stringOption('Offer Id', offerId, setOfferId),
+            stringOption('Fee (mojos)', fee, setFee),
             submitButton('Cancel Offer', () =>
-                rpc.cancelOffer({ id: offerId }),
+                rpc.cancelOffer({ id: offerId, fee }),
             ),
         ],
         chia_getNfts: [
@@ -180,7 +181,7 @@ export function useRpcUi() {
         chia_send: [
             stringOption('Address', address, setAddress),
             numberOption('Amount (mojos)', amount, setAmount),
-            numberOption('Fee (mojos)', fee, setFee),
+            stringOption('Fee (mojos)', fee, setFee),
             stringOption('Asset Id (blank for xch)', assetId, setAssetId),
             stringOption('Memos (comma separated hex)', memos, setMemos),
             submitButton('Send', () =>
@@ -208,7 +209,7 @@ export function useRpcUi() {
         ],
         chia_bulkMintNfts: [
             stringOption('DID', did, setDid),
-            numberOption('Fee', fee, setFee),
+            stringOption('Fee (mojos)', fee, setFee),
             submitButton('Bulk Mint Nfts', () =>
                 rpc.bulkMintNfts({
                     did,
